@@ -1,25 +1,59 @@
 import fs from 'fs';
 
 export default class File {
-  static #fsModule = fs;
-
   #name;
   #fullName;
   #content;
-  #contentToConsole() {
-    console.log(this.#content);
-  }
 
   constructor(path, fileName) {
-    this.#name = this.#checkString(fileName);
-    this.#fullName = this.#checkString(path) + this.#name;
-    this.#content = this.#readFileContent(this.#fullName);
+    return (async () => {
+      this.#name = this.#checkString(fileName);
+      this.#fullName = this.#checkString(path) + this.#name;
+      this.#content = await this.#getFileAsync(this.#fullName);
+      return this;
+    })();
   }
 
   get name() { return this.#name; }
   get fullName() { return this.#fullName; }
   get content() { return this.#content; }
-  get contentToConsole() { return this.#contentToConsole; }
+
+  set content(value) { this.#content = value; }
+
+  
+  displayContent() {
+    console.log(this.#content);  
+  }
+  
+
+  async #getFileAsync(pathName) {
+    let content;
+    try {
+      content = await this.#readFileWithPromise(pathName);        
+    } catch (error) {
+      content = `Ошибка чтения файла: ${error.message}`;
+    }
+    return content;
+  }
+
+  #readFileWithPromise(filePath) {
+    return new Promise((resolve, reject) => {
+      const readStream = fs.createReadStream(filePath, 'utf8');
+      let data = '';
+  
+      readStream.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      readStream.on('end', () => {
+        resolve(data);
+      });
+  
+      readStream.on('error', (err) => {
+        reject(err);
+      });
+    });
+  }
 
   #checkString(str) {
     if (!str 
@@ -28,21 +62,5 @@ export default class File {
       )
       throw new Error(`Error: file name is empty or no correct: ${str}`);
     return str;
-  }
-  
-  #readFileContent(file) {
-    try { 
-      let data = '';
-      File.#fsModule
-        .createReadStream(file, { encoding: 'utf-8' })
-        .on('error', (error) => console.log('Error: ', error.message))
-        .on('data', (chunk) => (data += chunk))
-        .on('end', () => {
-            this.#content = data;
-            console.log(this.#content);
-        }); 
-    } catch (error) {
-      console.error("An error occurred: ", error.message);
-    }
-  }
+  }  
 }
