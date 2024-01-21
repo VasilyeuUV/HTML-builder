@@ -23,8 +23,8 @@ export default class File {
   
   displayContent() {
     console.log(this.#content);  
-  }
-  
+  }  
+
 
   async #getFileAsync(pathName) {
     let content;
@@ -38,23 +38,15 @@ export default class File {
 
   #readFileWithPromise(filePath) {
     return new Promise((resolve, reject) => {
-      const readStream = fs.createReadStream(filePath, 'utf8');
       let data = '';
-  
-      readStream.on('data', (chunk) => {
-        data += chunk;
-      });
-  
-      readStream.on('end', () => {
-        resolve(data);
-      });
-  
-      readStream.on('error', (err) => {
-        reject(err);
-      });
+      const readStream = fs.createReadStream(filePath, 'utf8')
+      .on('error', (err) => { reject(err) })
+      .on('data', (chunk) => { data += chunk; })
+      .on('end', () => {resolve(data); });
     });
   }
 
+  
   #checkString(str) {
     if (!str 
       || typeof str !== 'string' 
