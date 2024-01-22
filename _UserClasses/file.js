@@ -1,3 +1,5 @@
+// for use write ("type": "module",) in package.json
+
 import fs from 'fs';
 
 export default class File {
@@ -46,7 +48,7 @@ export default class File {
     });
   }
 
-  
+
   #checkString(str) {
     if (!str 
       || typeof str !== 'string' 
