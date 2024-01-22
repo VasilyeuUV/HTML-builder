@@ -6,7 +6,7 @@ function copyCurrentFolder(folderFrom, folderTo) {
     if (err) throw err;
     files.forEach((file) => {
       if (file.isDirectory()) {
-        copyEntireFolder(
+        copyDir(
           path.join(file.path, file.name),
           path.join(folderTo, file.name),
         );
@@ -48,3 +48,8 @@ copyDir(
   path.join(__dirname, 'files'), 
   path.join(__dirname, 'files-copy')
   );
+
+
+module.exports = {
+  copyFolder: function(from, to) {return copyDir(from, to) }
+}
