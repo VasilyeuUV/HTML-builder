@@ -1,7 +1,12 @@
+/*
+ВНИМАНИЕ!!!
+для корректной работы задания №6 необходимол вставить код в соответствующие файлы заданий №4 и №5.
+*/
+
 const fs = require('fs');
 const path = require('path');
-const folder = require('../04-copy-directory/index.js');
-const style = require('../05-merge-styles/index.js');
+const folder = require('../04-copy-directory/index.js');    // Вставить код из задания 4 в файл по указанному пути
+const style = require('../05-merge-styles/index.js');       // Вставить код из задания 5 в файл по указанному пути
 
 function readFile(filePath) {
   return new Promise((resolve) => {
